@@ -1,12 +1,9 @@
-package com.ppzeff.loto_nd;
+package com.ppzeff;
 
 import com.ppzeff.loto_nd.property.FileStorageProperties;
-import com.ppzeff.loto_nd.service.IpService;
-import com.ppzeff.loto_nd.service.TelegrammBotService;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.ppzeff.tinkoff.model.Model;
+import com.ppzeff.tinkoff.repo.ModelRepo;
+import com.ppzeff.tinkoff.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
@@ -27,8 +25,7 @@ import java.util.Date;
 })
 public class LotoNdApplication {
 //    String ip = "";
-    @Autowired
-    TelegrammBotService telegrammBotService;
+
 //    @Autowired
 //    IpService ipService;
 
@@ -44,6 +41,25 @@ public class LotoNdApplication {
         return scheduler;
     }
 
+    @Autowired
+    ModelRepo modelRepo;
+
+    @Autowired
+    MainService mainService;
+
+    @Scheduled(fixedDelay = 10 * 1000L, initialDelay = 0)
+    public void scheduled1() throws IOException {
+        List<Integer> listAllCode = modelRepo.findAllCode(); // new ArrayList<>();
+
+        List<Model> modelList = mainService.getRateByCode(listAllCode);
+
+        for (Model elModel : modelList) {
+            modelRepo.save(elModel);
+            System.out.println(
+                    new Date(elModel.getLastUpdate())+ " SAVE " +
+                            elModel.toString());
+        }
+    }
 
 //    @Scheduled(fixedDelay = 60 * 1000L, initialDelay = 3 * 1000L)
 //    public void scheduled1() throws IOException {
@@ -64,8 +80,6 @@ public class LotoNdApplication {
 
     @Scheduled(fixedDelay = 1_000_000 * 1000L)
     public void scheduled2() {
-        System.out.println("start telebot: " + new Date());
-        telegrammBotService.telBot();
 
         // do something on container startup
     }

@@ -7,6 +7,7 @@ import com.ppzeff.loto_nd.repository.LOTONdRepository;
 import com.ppzeff.loto_nd.repository.WorkSitesRepository;
 import com.ppzeff.loto_nd.service.FileStorageService;
 import com.ppzeff.loto_nd.service.SendEmailServiceHTMLImp;
+import com.ppzeff.loto_nd.service.SendEmailServiceThymeleafImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ public class LotoController {
     @Autowired
     private FileStorageService fileStorageService;
     @Autowired
-    private SendEmailServiceHTMLImp emailSender;
+    private SendEmailServiceThymeleafImp emailSender;
     @Autowired
     private WorkSitesRepository workSitesRepository;
 
@@ -93,7 +94,6 @@ public class LotoController {
 
         try {
             emailSender.sendEmail(lotoNdModel, fileStorageService.loadFileAsResource(fileName).getFile().getAbsolutePath());
-//            emailSender.sendThymeleafEmail(lotoNd,fileStorageService.loadFileAsResource(fileName).getFile().getAbsolutePath());
 
         } catch ( IOException e) {
             e.printStackTrace();
