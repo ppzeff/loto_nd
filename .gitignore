@@ -6,7 +6,7 @@ target/
 !**/src/test/**/target/
 
 /src/main/resources/upload/
-#application.properties
+application.properties
 
 ### STS ###
 .apt_generated

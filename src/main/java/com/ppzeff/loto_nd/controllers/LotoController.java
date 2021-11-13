@@ -6,7 +6,7 @@ import com.ppzeff.loto_nd.payload.UploadFileResponse;
 import com.ppzeff.loto_nd.repository.LOTONdRepository;
 import com.ppzeff.loto_nd.repository.WorkSitesRepository;
 import com.ppzeff.loto_nd.service.FileStorageService;
-import com.ppzeff.loto_nd.service.sendHtmlEmailService;
+import com.ppzeff.loto_nd.service.SendEmailServiceHTMLImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,31 +29,13 @@ public class LotoController {
     @Autowired
     private FileStorageService fileStorageService;
     @Autowired
-    private sendHtmlEmailService emailSender;
+    private SendEmailServiceHTMLImp emailSender;
     @Autowired
     private WorkSitesRepository workSitesRepository;
-
-//    @Autowired
-//    private sendThymeleafEmailService emailSender;
 
     @GetMapping("/workpermit/loto")
     public String home(Model model) {
         model.addAttribute("title", "Safety_LOTO_ND");
-//        workSitesRepository.save(new WorkSites("Фасовка"));
-//        workSitesRepository.save(new WorkSites("Процесс"));
-//        workSitesRepository.save(new WorkSites("Склад ЗЧ"));
-//        workSitesRepository.save(new WorkSites("Электрика"));//
-//        workSitesRepository.save(new WorkSites("Территория"));
-//        workSitesRepository.save(new WorkSites("ССиМ"));
-//        workSitesRepository.save(new WorkSites("СГП"));
-//        workSitesRepository.save(new WorkSites("Пилотный завод"));//
-//        workSitesRepository.save(new WorkSites("Очистные сооружения"));
-//        workSitesRepository.save(new WorkSites("Лаборатория физхим"));
-//        workSitesRepository.save(new WorkSites("Копакер"));
-//        workSitesRepository.save(new WorkSites("Лаборатория микроб"));
-//        workSitesRepository.save(new WorkSites("Котельная"));
-//        workSitesRepository.save(new WorkSites("АХУ"));
-
         Iterable<WorkSitesModel> workSites = workSitesRepository.findAll();
         model.addAttribute("workSites", workSites);
 
@@ -110,10 +92,10 @@ public class LotoController {
         lotoNdRepository.save(lotoNdModel);
 
         try {
-            emailSender.sendHtmlEmail(lotoNdModel, fileStorageService.loadFileAsResource(fileName).getFile().getAbsolutePath());
+            emailSender.sendEmail(lotoNdModel, fileStorageService.loadFileAsResource(fileName).getFile().getAbsolutePath());
 //            emailSender.sendThymeleafEmail(lotoNd,fileStorageService.loadFileAsResource(fileName).getFile().getAbsolutePath());
 
-        } catch (MessagingException | IOException e) {
+        } catch ( IOException e) {
             e.printStackTrace();
         }
 
