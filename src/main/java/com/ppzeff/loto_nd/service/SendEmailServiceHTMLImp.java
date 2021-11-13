@@ -19,36 +19,30 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class sendHtmlEmailService {
+public class SendEmailServiceHTMLImp implements sendEmailService {
     @Autowired
     public JavaMailSender emailSender;
 
-    public void sendHtmlEmail(LOTONdModel lotoNdModel, String fotoName) throws MessagingException, IOException {
+    public void sendEmail(LOTONdModel lotoNdModel, String photoName)  {
         Date date = lotoNdModel.getSomeDate();
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd-MM-yyyy");
-
         MimeMessage message = emailSender.createMimeMessage();
 
-        message.setFrom("DEHSSISFS<" + MyConstants.MY_EMAIL + ">");
-//        message.setRecipient(Message.RecipientType.TO, new InternetAddress(MyConstants.EMAIL_1));
-//        message.setRecipient(Message.RecipientType.TO, new InternetAddress(MyConstants.EMAIL_2));
-//        message.setRecipient(Message.RecipientType.CC, new InternetAddress(MyConstants.EMAIL_3));
-        Address[] addresses = new Address[2];
-        addresses[0] = new InternetAddress(MyConstants.EMAIL_1);
-        addresses[1] = new InternetAddress(MyConstants.EMAIL_2);
+        try {
+            message.setFrom("DEHSSISFS<" + MyConstants.MY_EMAIL + ">");
 
-//        addresses[0] = new InternetAddress(MyConstants.EMAIL_3);
-//        addresses[1] = new InternetAddress(MyConstants.EMAIL_3);
+            Address[] addresses = new Address[2];
+            addresses[0] = new InternetAddress(MyConstants.EMAIL_1);
+            addresses[1] = new InternetAddress(MyConstants.EMAIL_2);
 
-        message.addRecipients(Message.RecipientType.TO, addresses);
-        message.setSubject("Зарегистрировано LOTO разрешение №" + lotoNdModel.getId() + ", " + formatter.format(date));
-//        message.setText(lotoNd.toString());
+
+            message.addRecipients(Message.RecipientType.TO, addresses);
+            message.setSubject("Зарегистрировано LOTO разрешение №" + lotoNdModel.getId() + ", " + formatter.format(date));
 
         //Певый кусочек - html
         MimeBodyPart part1 = new MimeBodyPart();
         part1.addHeader("Content-Type", "text/plain; charset=UTF-8");
         String htmlText = "<html><body>" + "\n" +
-//                "<p>"+ "  "+ lotoNd.getId()+"</p>"+
 
                 "<p>Зарегистрировано LOTO разрешение № <span style=\"color: #ff0000;\" data-darkreader-inline-color=\"\"><strong>" +
                 lotoNdModel.getId() + ", в " + formatter.format(date) + "</strong></span></p>\n" +
@@ -60,8 +54,6 @@ public class sendHtmlEmailService {
                 "<br><img src=\"cid:" + lotoNdModel.getFotoName() +
                 "\"></body></html>";
 
-
-//                    "<br><img src=\"cid:" + fotoID + ".jpg\"></body></html>";
         part1.setDataHandler(new DataHandler(htmlText, "text/html; charset=\"utf-8\""));
 
         //Второй кусочек - файл
@@ -73,13 +65,12 @@ public class sendHtmlEmailService {
  */
         // Третий кусочек - вложение фото
         MimeBodyPart imagePart = new MimeBodyPart();
-        System.out.println(fotoName);
-        imagePart.attachFile(fotoName);
+        System.out.println(photoName);
+        imagePart.attachFile(photoName);
         String cid = lotoNdModel.getFotoName();
         System.out.println("cid: " + cid);
         imagePart.setContentID("<" + cid + ">");
         imagePart.setDisposition(MimeBodyPart.INLINE);
-
 
         MimeMultipart mimeMultipart = new MimeMultipart();
         mimeMultipart.addBodyPart(imagePart);
@@ -87,7 +78,12 @@ public class sendHtmlEmailService {
 
         message.setContent(mimeMultipart);
 
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.emailSender.send(message);
     }
-
 }

@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class sendThymeleafEmailService {
+public class SendEmailServiceThymeleafImp implements sendEmailService {
 
     @Autowired
     private JavaMailSender emailSender;
@@ -29,10 +27,12 @@ public class sendThymeleafEmailService {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
-    public void sendThymeleafEmail(LOTONdModel lotoNdModel, String fotoName) throws MessagingException, IOException {
+    public void sendEmail(LOTONdModel lotoNdModel, String fotoName)  {
         Date date = lotoNdModel.getSomeDate();
 //        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
+        try {
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,
@@ -58,7 +58,7 @@ public class sendThymeleafEmailService {
 //        helper.addInline(lotoNd.getFotoName(), new ClassPathResource("upload/"+lotoNd.getFotoName()), "image/png");
         helper.addInline(lotoNdModel.getFotoName(), new FileSystemResource(
                 new File(fotoName)));
-        try {
+
             emailSender.send(message);
             System.out.println(new Date() + " email send");
         } catch (Exception e) {
