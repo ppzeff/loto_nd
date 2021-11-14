@@ -26,9 +26,9 @@
             <p class="h1 my-3 text-center">WASTE ежесменный отчет по отходам</p>
 
             <div class="mb-3 mt-3">
-                <label for="secondFIOLabel" class="form-label">Укажите ФИО первого сотрудника:</label>
+                <label for="firstFIOLabel" class="form-label">Укажите ФИО первого сотрудника:</label>
                 <input class="form-control form-control-lg" name="firstFIO" list="firstDataListOptions"
-                       id="secondFIOLabel" placeholder="Начните ввод для поиска..." required>
+                       id="firstFIOLabel" placeholder="Начните ввод для поиска..." required>
                 <div class="invalid-feedback">Пожалуйста введите данные</div>
 
                 <!--                <option th:each="el : ${workSites}"-->
@@ -49,7 +49,7 @@
             <div class="mb-3 mt-3">
                 <label for="secondFIOLabel" class="form-label">Укажите ФИО второго сотрудника:</label>
                 <input class="form-control form-control-lg" name="secondFIO" list="secondDataListOptions"
-                       id="firstFIOLabel" placeholder="Начните ввод для поиска..." required>
+                       id="secondFIOLabel" placeholder="Начните ввод для поиска..." required>
                 <div class="invalid-feedback">Пожалуйста введите данные</div>
                 <datalist id="secondDataListOptions">
                     <option th:each="el:${wasteWorkers}"

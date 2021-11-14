@@ -26,11 +26,24 @@
             <p class="h1 my-3 text-center">LOTO разрешение</p>
 
             <div class="mb-3 mt-3">
-                <label for="validationInput" class="form-label">Укажите ФИО LOTO специалиста:</label>
-                <input class="form-control " id="validationInput" placeholder="Петров Петр Петрович" required
-                       name="specialistFIO">
+                <label for="secondFIOLabel" class="form-label">Укажите ФИО LOTO специалиста:</label>
+                <input class="form-control" name="specialistFIO" list="secondDataListOptions"
+                       id="secondFIOLabel" placeholder="Начните ввод для поиска..." required>
                 <div class="invalid-feedback">Пожалуйста введите данные</div>
+                <datalist id="secondDataListOptions">
+                    <option th:each="el:${list}"
+                            th:value="${el}"
+                            th:text="${el}"
+                    ></option>
+                </datalist>
             </div>
+
+<!--            <div class="mb-3 mt-3">-->
+<!--                <label for="validationInput" class="form-label">Укажите ФИО LOTO специалиста:</label>-->
+<!--                <input class="form-control " id="validationInput" placeholder="Петров Петр Петрович" required-->
+<!--                       name="specialistFIO">-->
+<!--                <div class="invalid-feedback">Пожалуйста введите данные</div>-->
+<!--            </div>-->
 
             <div class="mb-3 mt-3">
                 <label for="validationServer02" class="form-label">Укажите дату начала работ:</label>

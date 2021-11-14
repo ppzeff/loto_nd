@@ -21,6 +21,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Controller
 public class LotoController {
@@ -38,7 +39,9 @@ public class LotoController {
     public String home(Model model) {
         model.addAttribute("title", "Safety_LOTO_ND");
         Iterable<WorkSitesModel> workSites = workSitesRepository.findAll();
+        List<String> list = lotoNdRepository.findAllSpecialistFIO();
         model.addAttribute("workSites", workSites);
+        model.addAttribute("list", list);
 
         return "lototemplate";
     }
